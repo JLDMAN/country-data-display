@@ -1,0 +1,32 @@
+<div>
+    <div>
+      Country Selection:
+    </div>
+    <div>
+      <select (change)="getCountryData()" id="country">
+        <option *ngFor="let option of listOfNames">{{option}}</option>
+      </select>
+    </div>
+    <div *ngIf="countryError">
+      Country not found
+    </div>
+    <div *ngIf="cards">
+      <div>Country common name: {{countryName}}</div>
+      <div>Dependant status: {{pendentStatus}}</div>
+      <div>Un member: {{unMember}}</div>
+      <div>Capital: {{capital}}</div>
+      <div>Region: {{region}}</div>
+      <div>Subregion: {{subregion}}</div>
+      <div>Land area: {{landArea}}</div>
+      <div>Position: {{latLong}}</div>
+      <div>Population: {{population}}</div>
+      <div>Driving side: {{drivingSide}}</div>
+      <div>Time zone: {{timezone}}</div>
+      <div>Week starts on: {{weekBegins}}</div>
+      <!-- <div>National Flag: <img src="{{flag}}" alt="national flag"></div> -->
+      <!-- <div>Coat of arms: {{coatOfArms}}</div> -->
+      <div>Coat of arms: <img src="{{coatOfArms}}" alt="coat of arms"></div>
+    </div>
+    <div id="map" class="map"></div>
+</div>
+

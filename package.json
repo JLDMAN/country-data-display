@@ -18,6 +18,10 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
+    "@types/leaflet": "^1.9.3",
+    "angular-iframe": "^1.1.1",
+    "crypto-browserify": "^3.12.0",
+    "leaflet": "^1.9.4",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
