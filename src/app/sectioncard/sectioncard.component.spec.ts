@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DoublecardComponent } from './doublecard.component';
+import { SectioncardComponent } from './sectioncard.component';
 
-describe('DoublecardComponent', () => {
-  let component: DoublecardComponent;
-  let fixture: ComponentFixture<DoublecardComponent>;
+describe('SectioncardComponent', () => {
+  let component: SectioncardComponent;
+  let fixture: ComponentFixture<SectioncardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DoublecardComponent ]
+      declarations: [ SectioncardComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DoublecardComponent);
+    fixture = TestBed.createComponent(SectioncardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

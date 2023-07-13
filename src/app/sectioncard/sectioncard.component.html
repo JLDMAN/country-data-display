@@ -1,0 +1,15 @@
+<div class="card">
+    <div class="title">{{cardTitle}}</div>
+    <div class="container">
+        <div class="stat">
+            <div *ngFor="let lable of lables">
+                {{lable}}
+            </div>
+        </div>
+        <div class="stat">
+            <div *ngFor="let value of values">
+                {{value}}
+            </div>            
+        </div>
+    </div>
+</div>

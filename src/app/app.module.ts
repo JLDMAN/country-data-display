@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http';
 // routing modules
 import { AppRoutingModule } from '../app/routing/app-routing.module';
+// import { AppRoutingModule } from './routing/app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SinglecardComponent } from './singlecard/singlecard.component';
-import { DoublecardComponent } from './doublecard/doublecard.component';
+import { SectioncardComponent } from './sectioncard/sectioncard.component';
+import { FlagcardComponent } from './flagcard/flagcard.component';
+import { CoatofarmscardComponent } from './coatofarmscard/coatofarmscard.component';
 // style modules
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    SinglecardComponent,
-    DoublecardComponent
+    DashboardComponent,    
+    SectioncardComponent, 
+    FlagcardComponent, 
+    CoatofarmscardComponent
   ],
   imports: [
     BrowserModule,

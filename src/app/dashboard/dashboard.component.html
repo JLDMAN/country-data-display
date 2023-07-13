@@ -1,32 +1,60 @@
-<div>
-    <div>
-      Country Selection:
+<!-- data selection -->
+<div class="mainSearch">
+  <div class="container">
+    <div class="searchPrompt">
+      <i class="pi pi-search" style="font-size: 2rem"></i>
     </div>
     <div>
-      <select (change)="getCountryData()" id="country">
+      <select (change)="getCountryData()" id="country" class="custom-select">
         <option *ngFor="let option of listOfNames">{{option}}</option>
       </select>
     </div>
-    <div *ngIf="countryError">
-      Country not found
+  </div>
+  <div *ngIf="countryError" class="error center">
+    Country not found
+  </div>
+</div>
+<!-- data display -->
+<div class="container">
+  <div class="containerElements">
+    <div *ngIf="cards">
+      <app-sectioncard 
+        [cardTitle]="'Location Data'" 
+        [values]="[region, subregion, landArea, latLong, timezone]"
+        [lables]="['Region: ','Subregion: ','Land area: ','Latitude and Longitude: ','Time zone: ']">
+      </app-sectioncard>
     </div>
     <div *ngIf="cards">
-      <div>Country common name: {{countryName}}</div>
-      <div>Dependant status: {{pendentStatus}}</div>
-      <div>Un member: {{unMember}}</div>
-      <div>Capital: {{capital}}</div>
-      <div>Region: {{region}}</div>
-      <div>Subregion: {{subregion}}</div>
-      <div>Land area: {{landArea}}</div>
-      <div>Position: {{latLong}}</div>
-      <div>Population: {{population}}</div>
-      <div>Driving side: {{drivingSide}}</div>
-      <div>Time zone: {{timezone}}</div>
-      <div>Week starts on: {{weekBegins}}</div>
-      <!-- <div>National Flag: <img src="{{flag}}" alt="national flag"></div> -->
-      <!-- <div>Coat of arms: {{coatOfArms}}</div> -->
-      <div>Coat of arms: <img src="{{coatOfArms}}" alt="coat of arms"></div>
+      <app-sectioncard 
+        [cardTitle]="'Country Information'" 
+        [values]="[capital, population, drivingSide, weekBegins, languages, demonyms]"
+        [lables]="['Capital: ','Population: ','Driving side: ','Week starts on: ','National Language/s: ','Demonyms:']">
+      </app-sectioncard>
     </div>
+    <div *ngIf="cards">
+      <app-sectioncard 
+        [cardTitle]="'Global Properties'" 
+        [values]="[pendentStatus, unMember, gini]"
+        [lables]="['Dependant status: ','Un member: ','Gini index rating: ']">
+      </app-sectioncard>
+    </div>
+  </div>
+  <!-- images -->
+  <div class="containerElements">
+    <div>
+      <div> 
+        <app-coatofarmscard [url]="coatOfArms"></app-coatofarmscard>
+      </div>
+    </div>
+    <div>
+      <div> 
+        <app-flagcard [url]="flag"></app-flagcard>
+      </div>
+    </div>
+  </div>
+  <!-- map -->
+  <div class="containerElements maps">
     <div id="map" class="map"></div>
+  </div>
 </div>
 

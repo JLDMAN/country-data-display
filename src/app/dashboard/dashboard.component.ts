@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiserviceService } from '../service/apiservice.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as L from 'leaflet';
 
 @Component({
@@ -26,6 +25,9 @@ export class DashboardComponent implements OnInit {
   drivingSide: string = '';
   timezone: string = '';
   weekBegins: string = '';
+  languages: any[] =[''];
+  demonyms: any[] =[''];
+  gini: string = '';
   // image urls
   flag: string = '';
   coatOfArms: string = '';
@@ -40,11 +42,12 @@ export class DashboardComponent implements OnInit {
   hide: boolean = true;
   // erors
   countryError: boolean = false;
+  // descriptions
+  countryDescription: string = 'Country common name';
 
   constructor(
     private http: HttpClient,
     private apiservice: ApiserviceService,
-    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -52,11 +55,13 @@ export class DashboardComponent implements OnInit {
   }
 
   getCountryNames(){
+    this.listOfNames = [''];
   // call api for all country names
    this.http.get<any>('https://restcountries.com/v3.1/all?fields=name').subscribe(res => {
     for (let i = 0; i < res.length; i ++){
       this.listOfNames.push(res[i].name.common);
     }
+    this.listOfNames.sort();
    });
   }
 
@@ -76,7 +81,6 @@ export class DashboardComponent implements OnInit {
     
     // find selected country
     this.selectedCountry = (<HTMLSelectElement>document.getElementById("country")).value;
-    console.log(this.selectedCountry);
 
     // get overall data from country
     this.http.get<any>('https://restcountries.com/v3.1/name/' + this.selectedCountry + '?fullText=true').subscribe(res => {
@@ -104,6 +108,9 @@ export class DashboardComponent implements OnInit {
           this.flag = res[0].flags.png
           this.coatOfArms = res[0].coatOfArms.png
           this.weekBegins = res[0].startOfWeek
+          this.languages =  res[0].languages[0]
+          this.demonyms = res[0].demonyms.eng.m
+          this.gini = res[0].gini
         }else{
           // display
           this.countryError = true;
