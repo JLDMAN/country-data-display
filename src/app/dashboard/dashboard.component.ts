@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiserviceService } from '../service/apiservice.service';
 import * as L from 'leaflet';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-dashboard',
@@ -20,22 +21,22 @@ export class DashboardComponent implements OnInit {
   region: string = '';
   subregion: string = '';
   landArea: string = '';
-  latLong: any[] =[''];
+  latLong: any[] = [''];
   population: string = '';
   drivingSide: string = '';
   timezone: string = '';
   weekBegins: string = '';
-  languages: any[] =[''];
-  demonyms: any[] =[''];
+  languages: string = '';
+  demonyms: any[] = [''];
   gini: string = '';
   // image urls
   flag: string = '';
   coatOfArms: string = '';
   // land map variables
-  map: any='';
-  lat: any='';
-  long: any='';
-  scale: any='';
+  map: any = '';
+  lat: any = '';
+  long: any = '';
+  scale: any = '';
   // on page displays
   cards: boolean = false;
   show: boolean = true;
@@ -48,44 +49,50 @@ export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private apiservice: ApiserviceService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+    // load all country names
     this.getCountryNames();
   }
 
-  getCountryNames(){
+  getCountryNames() {
     this.listOfNames = [''];
-  // call api for all country names
-   this.http.get<any>('https://restcountries.com/v3.1/all?fields=name').subscribe(res => {
-    for (let i = 0; i < res.length; i ++){
-      this.listOfNames.push(res[i].name.common);
-    }
-    this.listOfNames.sort();
-   });
+    // call api for all country names
+    this.http.get<any>('https://restcountries.com/v3.1/all?fields=name').subscribe(res => {
+      for (let i = 0; i < res.length; i++) {
+        this.listOfNames.push(res[i].name.common);
+      }
+      this.listOfNames.sort();
+    });
   }
 
-  getCountryData(){
+  getCountryData() {
     // reset values
     this.countryName = '';
     this.pendentStatus = false;
     this.unMember = false;
     this.capital = '';
-    this.region  = '';
+    this.region = '';
     this.subregion = '';
     this.landArea = '';
     this.latLong = [''];
     this.lat = '';
     this.long = '';
     this.scale = '';
-    
+    this.flag = '';
+    this.coatOfArms = '';
+
     // find selected country
     this.selectedCountry = (<HTMLSelectElement>document.getElementById("country")).value;
 
     // get overall data from country
     this.http.get<any>('https://restcountries.com/v3.1/name/' + this.selectedCountry + '?fullText=true').subscribe(res => {
-      for (let i = 0; i < res.length; i ++){
-        if (res.length > 0){
+      this.spinner.show();
+
+      for (let i = 0; i < res.length; i++) {
+        if (res.length > 0) {
           // display
           this.countryError = false;
           this.cards = true;
@@ -100,22 +107,34 @@ export class DashboardComponent implements OnInit {
           this.latLong = res[0].latlng
           this.lat = res[0].latlng[0];
           this.long = res[0].latlng[1];
-          this.scale = 10;
+          this.scale = 4;
+          // Check if map container exists before initializing the map
           this.initMap(this.lat, this.long, this.scale);
           this.population = res[0].population;
           this.drivingSide = res[0].car.side
-          this.timezone = res[0].timezones
+          this.timezone = res[0].timezones[0]
           this.flag = res[0].flags.png
           this.coatOfArms = res[0].coatOfArms.png
           this.weekBegins = res[0].startOfWeek
-          this.languages =  res[0].languages[0]
           this.demonyms = res[0].demonyms.eng.m
-          this.gini = res[0].gini
-        }else{
+          // Check if languages property exists before calling substring
+          if (res[0].languages) {
+            this.languages = JSON.stringify(res[0].languages).substring(2, 5);
+          } else {
+            this.languages = 'unknown';
+          }
+          // Check if gini property exists before calling substring
+          if (res[0].gini) {
+            this.gini = JSON.stringify(res[0].gini).substring(8, 10);
+          } else {
+            this.gini = 'unknown';
+          }
+        } else {
           // display
           this.countryError = true;
           this.cards = false;
         }
+        this.spinner.hide();
       }
     });
   }
@@ -125,12 +144,9 @@ export class DashboardComponent implements OnInit {
     if (this.map) {
       this.map.remove();
     }
-
     this.map = new L.Map('map').setView([x, y], z); // Set initial coordinates and zoom level
-  
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' // Add attribution for OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors' // Add attribution for OpenStreetMap
     }).addTo(this.map);
-  //   L.tileLayer('https://{s}.tile.www.osmap.us/#{z}/{x}/{y}', { attribution: '© OpenStreetMap contributors' // Add attribution for OpenStreetMap
-  // }).addTo(this.map);
   }
 }

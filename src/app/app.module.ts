@@ -9,7 +9,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SectioncardComponent } from './sectioncard/sectioncard.component';
 import { FlagcardComponent } from './flagcard/flagcard.component';
 import { CoatofarmscardComponent } from './coatofarmscard/coatofarmscard.component';
-// style modules
+// Import library/style modules
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CoatofarmscardComponent } from './coatofarmscard/coatofarmscard.compone
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
