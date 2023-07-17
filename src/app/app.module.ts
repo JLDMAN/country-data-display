@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // routing modules
 import { AppRoutingModule } from '../app/routing/app-routing.module';
 // import { AppRoutingModule } from './routing/app-routing.module';
@@ -11,6 +12,8 @@ import { FlagcardComponent } from './flagcard/flagcard.component';
 import { CoatofarmscardComponent } from './coatofarmscard/coatofarmscard.component';
 // Import library/style modules
 import { NgxSpinnerModule } from "ngx-spinner";
+import { MapComponent } from './map/map.component';
+import { ThemeswitchComponent } from './themeswitch/themeswitch.component';
 
 @NgModule({
   declarations: [
@@ -18,13 +21,14 @@ import { NgxSpinnerModule } from "ngx-spinner";
     DashboardComponent,    
     SectioncardComponent, 
     FlagcardComponent, 
-    CoatofarmscardComponent
+    CoatofarmscardComponent, MapComponent, ThemeswitchComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

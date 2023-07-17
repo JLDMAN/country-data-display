@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiserviceService } from '../service/apiservice.service';
-import * as L from 'leaflet';
 import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
@@ -9,7 +8,7 @@ import { NgxSpinnerService } from "ngx-spinner";
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
   listOfNames: any[] = [''];
   // retrieved data
@@ -21,7 +20,6 @@ export class DashboardComponent implements OnInit {
   region: string = '';
   subregion: string = '';
   landArea: string = '';
-  latLong: any[] = [''];
   population: string = '';
   drivingSide: string = '';
   timezone: string = '';
@@ -33,9 +31,7 @@ export class DashboardComponent implements OnInit {
   flag: string = '';
   coatOfArms: string = '';
   // land map variables
-  map: any = '';
-  lat: any = '';
-  long: any = '';
+  latLong: any[] = [''];
   scale: any = '';
   // on page displays
   cards: boolean = false;
@@ -47,55 +43,60 @@ export class DashboardComponent implements OnInit {
   countryDescription: string = 'Country common name';
 
   constructor(
-    private http: HttpClient,
     private apiservice: ApiserviceService,
     private spinner: NgxSpinnerService
   ) { }
 
-  ngOnInit(): void {
-    // load all country names
-    this.getCountryNames();
+  ngAfterViewInit() {
   }
 
-  getCountryNames() {
+  ngOnInit(): void {
+    // load all country names
+    this.loadCountryNames();
+    // load initial values
+    // this.loadCountryData();
+  }
+
+  loadCountryNames() {
     this.listOfNames = [''];
     // call api for all country names
-    this.http.get<any>('https://restcountries.com/v3.1/all?fields=name').subscribe(res => {
+    this.apiservice.getCountryNames().subscribe( res => {
       for (let i = 0; i < res.length; i++) {
         this.listOfNames.push(res[i].name.common);
       }
       this.listOfNames.sort();
-    });
+    })
   }
 
-  getCountryData() {
+
+  loadCountryData() {
     // reset values
-    this.countryName = '';
-    this.pendentStatus = false;
-    this.unMember = false;
-    this.capital = '';
-    this.region = '';
-    this.subregion = '';
-    this.landArea = '';
-    this.latLong = [''];
-    this.lat = '';
-    this.long = '';
-    this.scale = '';
-    this.flag = '';
-    this.coatOfArms = '';
+    this.countryName = ''
+    this.pendentStatus = false
+    this.unMember = false
+    this.capital = ''
+    this.region = ''
+    this.subregion = ''
+    this.landArea = ''
+    this.latLong = ['']
+    this.scale = ''
+    this.flag = ''
+    this.coatOfArms = ''
+    this.cards = false
+    this.spinner.show()
 
     // find selected country
     this.selectedCountry = (<HTMLSelectElement>document.getElementById("country")).value;
 
     // get overall data from country
-    this.http.get<any>('https://restcountries.com/v3.1/name/' + this.selectedCountry + '?fullText=true').subscribe(res => {
-      this.spinner.show();
+    this.apiservice.getCountryData(this.selectedCountry).subscribe(res => {
 
       for (let i = 0; i < res.length; i++) {
         if (res.length > 0) {
           // display
           this.countryError = false;
           this.cards = true;
+          this.spinner.hide();
           // retrieved information
           this.countryName = res[0].name.common
           this.pendentStatus = res[0].independent
@@ -105,11 +106,7 @@ export class DashboardComponent implements OnInit {
           this.subregion = res[0].subregion
           this.landArea = res[0].area
           this.latLong = res[0].latlng
-          this.lat = res[0].latlng[0];
-          this.long = res[0].latlng[1];
-          this.scale = 4;
-          // Check if map container exists before initializing the map
-          this.initMap(this.lat, this.long, this.scale);
+          this.scale = 5;
           this.population = res[0].population;
           this.drivingSide = res[0].car.side
           this.timezone = res[0].timezones[0]
@@ -133,20 +130,9 @@ export class DashboardComponent implements OnInit {
           // display
           this.countryError = true;
           this.cards = false;
+          this.spinner.hide();
         }
-        this.spinner.hide();
       }
     });
-  }
-
-  initMap(x: number, y: number, z: number | undefined) {
-    // Clear previous instance of the map
-    if (this.map) {
-      this.map.remove();
-    }
-    this.map = new L.Map('map').setView([x, y], z); // Set initial coordinates and zoom level
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors' // Add attribution for OpenStreetMap
-    }).addTo(this.map);
   }
 }

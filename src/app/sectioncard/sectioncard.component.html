@@ -2,12 +2,12 @@
     <div class="title bold">{{cardTitle}}</div>
     <div class="container">
         <div class="stat bold">
-            <div *ngFor="let lable of lables">
+            <div class="item" *ngFor="let lable of lables">
                 {{lable}}
             </div>
         </div>
         <div class="stat">
-            <div *ngFor="let value of values">
+            <div class="item" *ngFor="let value of values">
                 {{value}}
             </div>            
         </div>
